@@ -18,26 +18,24 @@ import time
 import math
 import csv
 
-try:
-    from tkinter import *
-    from tkinter.ttk import *
-except Exception, e:
-    print "[ERROR]:", e
-    from Tkinter import *
+
+from tkinter import *
+from tkinter.ttk import *
+
 
 list_of_cities =[]
 
 #########################################
 ######                             ######
-######    Algorithm paremeters:    ######
+######    Algorithm parameters:    ######
 ######                             ######
 #########################################
 
 # probability that an individual Route will mutate
-k_mut_prob = 0.4
+k_mut_prob = 0.05
 
 # Number of generations to run for
-k_n_generations = 100
+k_n_generations = 1000
 # Population size of 1 generation (RoutePop)
 k_population_size = 100
 
@@ -534,7 +532,7 @@ class App(object):
             # Runs the main window loop
             self.window_loop()
         else:
-            print "Calculating GA_loop"
+            print ("Calculating GA_loop")
             self.GA_loop(n_generations,pop_size, graph=graph)
 
     def set_city_gcoords(self):
@@ -639,9 +637,9 @@ class App(object):
         start_time = time.time()
 
         # Creates the population:
-        print "Creates the population:"
+        print ("Creates the population:")
         the_population = RoutePop(pop_size, True)
-        print "Finished Creation of the population"
+        print ("Finished Creation of the population")
 
         # the_population.rt_pop[0].route = [1,8,38,31,44,18,7,28,6,37,19,27,17,43,30,36,46,33,20,47,21,32,39,48,5,42,24,10,45,35,4,26,2,29,34,41,16,22,3,23,14,25,13,11,12,15,40,9]
         # the_population.rt_pop[0].recalc_rt_len()
@@ -754,6 +752,10 @@ class App(object):
 # j = City('c2', 1, 22)
 # k = City('c3', 2, 13)
 
+
+
+
+
 def specific_cities2():
     """function to calculate the route for files in data folder with coordinates"""
     start_time = time.time()
@@ -766,28 +768,23 @@ def specific_cities2():
     f.readline()
     for i, li in enumerate(f.readlines(), start=1):
         os.system('cls' if os.name=='nt' else 'clear')
-        print "Leyendo '{}': {}/{} lineas".format(f.name, i, lines)
+        print ("Reading '{}': {}/{} lines".format(f.name, i, lines))
         c = li.split()
         if not 'EOF' in c:
             tmp = City("C" + str(c[0]), float(c[1]), float(c[2]))
     print("---Time reading file and creating Cities: %s seconds ---\n" % str(time.time() - start_time))
     
     start_time = time.time()
-    print "Calculating distances..."
+    print ("Calculating distances...")
     for city in list_of_cities:
         city.calculate_distances()
     print("---Time Calculating distances: %s seconds ---\n" % str(time.time() - start_time))
     
-    print "Buscando la ruta mas corta para el viajero..."
-    try:
-        start_time = time.time()
-        app = App(n_generations=k_n_generations,pop_size=k_population_size)
-        print("---Ruta encontrada en %s seconds ---" % str(time.time() - start_time))
-    except Exception, e:
-        print "\n[ERROR]: %s\n" % e
-    # try:
-    # except Exception, e:
-    #     print "[Exception]", e
+    print ("Finding the shortest route")
+    start_time = time.time()
+    app = App(n_generations=k_n_generations,pop_size=k_population_size)
+    print("---Route found in %s seconds ---" % str(time.time() - start_time))
+
 
 
 def specific_cities():
@@ -801,24 +798,24 @@ def specific_cities():
         lines = int(f.readline())
         for i, li in enumerate(f.readlines(), start=1):
             os.system('cls' if os.name=='nt' else 'clear')
-            print "Leyendo '{}': {}/{} lineas".format(f.name, i, lines)
+            print ("Reading '{}': {}/{} lines".format(f.name, i, lines))
             d = {}
             for j, line in enumerate(map(float, li.split()), start=1):
                 d["C" + str(j)] = line
             tmp = City("C" + str(i), 10, 10, d)
         print("--- %s seconds ---" % str(time.time() - start_time))
         band = True
-    except Exception, e:
-        print e
+    except Exception:
+        print ('Kupa')
         band = False
     if band:
-        print "Buscando la ruta mas corta para el viajero..."
+        print ("Finding the shortest route...")
         try:
             start_time = time.time()
             app = App(n_generations=k_n_generations,pop_size=k_population_size)
             print("---Ruta encontrada en %s seconds ---" % str(time.time() - start_time))
-        except Exception, e:
-            print "\n[ERROR]: %s\n" % e
+        except Exception:
+            print ("Chuj")
 
 
 def random_cities():
@@ -855,7 +852,7 @@ def random_cities():
 
 if __name__ == '__main__':
     """Select only one function: random, specific or specific2"""
-    specific_cities2()
-    # specific_cities()
-    # random_cities()
+    # specific_cities2()
+    specific_cities()
+    #  random_cities()
 
